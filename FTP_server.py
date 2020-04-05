@@ -5,6 +5,22 @@ import threading
 
 listen_port = 1230
 
+def parse(command):
+    my_dict = {}
+    command = command.split()
+    my_dict["command"] = command[0]
+    my_dict["flag"] = "None"
+    my_dict["str"] = "None"
+
+    if len(command) == 1:
+        return my_dict
+    if len(command) == 2:
+        my_dict["str"] = command[1]
+    else:
+        my_dict["flag"] =  command[1][1]
+        my_dict["str"] =  command[2]
+    return my_dict
+
 class Server():
     def __init__(self, ip='', listen_port=1234, queue_size=10):
         self.ip_ = ip
@@ -71,7 +87,17 @@ class Server():
             raise Exception()
         print("data socket set up succesfully")
         
-        #redirect to a function that handles requests :))
+        self.command_handler(c_cmnd_sock, c_data_sock)
+
+    def command_handler(self, c_cmnd_sock, c_data_sock):
+        while True:
+            msg = c_cmnd_sock.recv(1024).decode()
+            print("command recieved: ", msg)
+            client_command = parse(msg)
+            print(client_command)
+
+            #redirect to a function that handles requests :))
+
 
 if __name__ == "__main__":
     server = Server(listen_port=listen_port)

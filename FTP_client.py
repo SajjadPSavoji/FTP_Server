@@ -1,5 +1,6 @@
 # Import socket module 
 import socket
+import json
 
 server_port = 1230
 
@@ -46,6 +47,13 @@ class Client():
         print("data socket set up succesfully")
         
         #redirect to a function that handles requests :))
+        self.get_input(s_cmnd_sock, s_data_sock)
+    
+    def get_input(self, s_cmnd_sock, s_data_sock):
+        print("Ready for command:")
+        while(True):
+            input_str = input()
+            s_cmnd_sock.send(input_str.encode())
 
 
 if __name__ == "__main__":
