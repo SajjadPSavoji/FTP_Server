@@ -6,7 +6,7 @@ class CRequest():
     def parse(self, command):
         my_dict = {}
         command = command.split()
-        my_dict["command"] = command.pop(0)
+        my_dict["routine"] = command.pop(0)
         my_dict["flags"] = []
         my_dict["args"]  = []
 
@@ -24,6 +24,13 @@ class CRequest():
 class SRequest():
     def __init__(self, str):
         self.__dict__ = json.loads(str.decode())
-        
+
     def __repr__(self):
         return json.dumps(self.__dict__).encode()
+
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
