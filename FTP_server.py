@@ -2,24 +2,10 @@
 import socket 
 from _thread import *
 import threading
+import json
+from Request import SRequest as Req
 
 listen_port = 1230
-
-def parse(command):
-    my_dict = {}
-    command = command.split()
-    my_dict["command"] = command[0]
-    my_dict["flag"] = "None"
-    my_dict["str"] = "None"
-
-    if len(command) == 1:
-        return my_dict
-    if len(command) == 2:
-        my_dict["str"] = command[1]
-    else:
-        my_dict["flag"] =  command[1][1]
-        my_dict["str"] =  command[2]
-    return my_dict
 
 class Server():
     def __init__(self, ip='', listen_port=1234, queue_size=10):
@@ -51,7 +37,6 @@ class Server():
         s_cmnd_sock.listen(1)
         # listen on data_port
         s_data_sock.listen(1)
-        
         # send port numbers to client
         msg = str(s_cmnd_sock.getsockname()[1]) +" "+ str(s_data_sock.getsockname()[1])
         c.send(msg.encode())
@@ -63,10 +48,11 @@ class Server():
             raise Exception()
         # close current connection
         c.close()
-        
+
+
+
         # accept client command port {c_cmnd_port}
         c_cmnd_sock, addr = s_cmnd_sock.accept()  
-    
         # send ACK
         c_cmnd_sock.send("ACK".encode())
         # recieve ACK
@@ -78,7 +64,6 @@ class Server():
 
         # accept client data port {c_data_port}
         c_data_sock, addr = s_data_sock.accept() 
-
         # send ACK
         c_data_sock.send("ACK".encode())
         # recieve ACK
@@ -87,15 +72,13 @@ class Server():
             raise Exception()
         print("data socket set up succesfully")
         
-        self.command_handler(c_cmnd_sock, c_data_sock)
+        self.req_handler(c_cmnd_sock, c_data_sock)
 
-    def command_handler(self, c_cmnd_sock, c_data_sock):
+    def req_handler(self, c_cmnd_sock, c_data_sock):
         while True:
-            msg = c_cmnd_sock.recv(1024).decode()
-            print("command recieved: ", msg)
-            client_command = parse(msg)
-            print(client_command)
-
+            msg = c_cmnd_sock.recv(1024)
+            req = Req(msg)
+            print("command recieved: ", req.__repr__())
             #redirect to a function that handles requests :))
 
 

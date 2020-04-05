@@ -1,8 +1,10 @@
 # Import socket module 
 import socket
 import json
+from Request import CRequest as Req
 
 server_port = 1230
+
 
 class Client():
     def __init__(self, ip='127.0.0.1', server_listen_port=1234):
@@ -19,6 +21,7 @@ class Client():
         client_sock.send("ACK".encode())
         client_sock.close()
         self.server_hand_shake(msg[0], msg[1])
+        self.command_handler()
             
     def server_hand_shake(self, cmnd_port, data_port):
         # make new sockets {cmnd_sock , data_sock}
@@ -44,16 +47,16 @@ class Client():
             s_data_sock.close()
             raise Exception()
         s_data_sock.send("ACK".encode())
+
+        self. s_cmnd_sock = s_cmnd_sock 
+        self. s_data_sock = s_data_sock 
         print("data socket set up succesfully")
-        
-        #redirect to a function that handles requests :))
-        self.get_input(s_cmnd_sock, s_data_sock)
     
-    def get_input(self, s_cmnd_sock, s_data_sock):
+    def command_handler(self):
         print("Ready for command:")
         while(True):
-            input_str = input()
-            s_cmnd_sock.send(input_str.encode())
+            req = Req(input())
+            self.s_cmnd_sock.send(req.__repr__())
 
 
 if __name__ == "__main__":
