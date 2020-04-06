@@ -62,6 +62,7 @@ class Client():
         res = Res(msg)
         # check stuff
         self.s_cmnd_sock.send("ACK".encode())
+        self.s_cmnd_sock.recv(1024)
         print(msg)
 
         if "file" in res:

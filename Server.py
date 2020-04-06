@@ -4,6 +4,7 @@ import threading
 import json
 from Request import SRequest as Req
 from Response import SRecponse as Res
+from User import User
 
 class Server():
     def __init__(self, ip='', listen_port=1234, queue_size=10):
@@ -18,6 +19,14 @@ class Server():
         # read json file and make appropriate routines
         return
         raise NotImplementedError()
+
+    def portal(self, c, addr):
+        try:
+            self.client_hand_shake(c, addr)
+        except:
+            print("client offline")
+            return
+            raise NotImplementedError()
     
     def run(self):
         lstn_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -29,7 +38,7 @@ class Server():
         while True:
             client, addr = lstn_sock.accept()
             print('Got connection from', addr)
-            start_new_thread(self.client_hand_shake, (client,addr,))
+            start_new_thread(self.portal, (client,addr,))
             
     def client_hand_shake(self, c, addr):
         # make new sockets {cmnd_sock , data_sock}
@@ -78,60 +87,61 @@ class Server():
         print("data socket set up succesfully")
 
         # hal nadashtam ino doros konam badan doros mikonam
-        self.c_cmnd_sock = c_cmnd_sock
-        self.c_data_sock = c_data_sock
+        user = User(c_cmnd_sock, c_data_sock)
         
-        self.req_handler()
+        self.req_handler(user)
 
-    def req_handler(self):
+    def req_handler(self, user):
         while True:
-            msg = self.c_cmnd_sock.recv(1024)
+            msg = user.cmnd_sock.recv(1024)
             req = Req(msg)
             print("command recieved: ", req.__repr__())
             #redirect to a function that handles requests :))
             res = None
             try:
                 self.ath_check(req)
-                res = self.routine_handler(req)
+                res = self.routine_handler(req, user)
             except Res as r:
                 print("in except block")
                 res = r
-            self.log(res)
-            self.service(res)
+            self.log(res, user)
+            self.service(res, user)
 
     def ath_check(self, req):
-        if ("sid" in req) or (req["routine"] == "USER") or (req["routine"] == "PASS"):
-            pass
-        raise Res(530, "Not loged in")
+        if "sid" in req:
+            self.routines["ath"].check(req)
 
-    def routine_handler(self, req):
+        elif (req["routine"] == "USER") or (req["routine"] == "PASS"):
+            pass
+
+        else:
+            raise Res(530, "Not loged in")
+
+    def routine_handler(self, req, user):
         if req["routine"] in self.routines:
-            return self.routines[[req["routine"]]].service(req)
+            return self.routines[[req["routine"]]].service(req, user)
         else:
             return Res(502, "Command not implemented")
 
-    def log(self, res):
+    def log(self, res, user):
         return
         raise NotImplementedError()
 
-    def service(self, res):
-        self.c_cmnd_sock.send(res.__repr__()) # send response
-        msg = self.c_cmnd_sock.recv(1024).decode()     # receive ACK
+    def service(self, res, user):
+        user.cmnd_sock.send(res.__repr__()) # send response
+        msg = user.cmnd_sock.recv(1024).decode()     # receive ACK
         if not msg == "ACK":
             self.exit()
-        self.c_cmnd_sock.send("ACK".encode()) # send ACK
-
+        user.cmnd_sock.send("ACK".encode()) # send ACK
         # send file whenever necessarry
         if "file" in res:
-            self.send_file(res)
+            self.send_file(res, user)
 
     
     def exit(self):
-        self.c_data_sock.close()
-        self.c_cmnd_sock.close()
-        exit()
+        raise NotImplementedError()
 
-    def send_file(self, res):
+    def send_file(self, res, user):
         raise NotImplementedError()
 
     
