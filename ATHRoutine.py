@@ -19,7 +19,7 @@ class ATHRoutine(base):
             raise Exception("request not supported")
 
     def user_service(self, req, user):
-        self.check_request(req)
+        self.check_request(req, user)
         self.check_not_logged_in(req, user)
         if user.username is not None:
             return Res(536, "PASS needed")
@@ -30,7 +30,7 @@ class ATHRoutine(base):
             return Res(430, "Invalid username or password")
 
     def pass_service(self, req, user):
-        self.check_request(req)
+        self.check_request(req, user)
         self.check_not_logged_in(req, user)
         if user.username is None:
             return Res(503, "Bad sequence of commands")
@@ -45,12 +45,12 @@ class ATHRoutine(base):
 
     def quit_service(self, req, user):
         # check logged in
-        self.check_quit_request(req)
+        self.check_quit_request(req, user)
         self.check(req)
         self.sids_.remove(user.sid)
         return Res(230, "Logged out")
 
-    def check_quit_request(self, req):
+    def check_quit_request(self, req, user):
         if len(req["args"]) >= 1 or len(req["flags"])>=1:
             raise Res(501, "Syntax error in parameters or arguments", user.sid)
         
@@ -72,7 +72,7 @@ class ATHRoutine(base):
         if req["sid"] in self.sids_:
             raise Res(536, "Already logged in", user.sid)
 
-    def check_request(self, req):
+    def check_request(self, req, user):
         if not len(req["args"]) == 1:
             raise Res(501, "Syntax error in parameters or arguments", user.sid)
 
