@@ -16,6 +16,7 @@ class Server():
     def config(self):
         self.routines = {}
         # read json file and make appropriate routines
+        return
         raise NotImplementedError()
     
     def run(self):
@@ -110,6 +111,7 @@ class Server():
             raise Res(502, "Command not implemented")
 
     def log(self, res):
+        return
         raise NotImplementedError()
 
     def service(self, res):
