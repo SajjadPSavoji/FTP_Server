@@ -3,12 +3,12 @@
   "dataChannelPort":8001,
   "users": [
     {
-      "user": "navid",
-      "password": "1234"
+      "user": "sajjad",
+      "password": "1"
     },
     {
-      "user": "farzad",
-      "password": "5678"
+      "user": "sina",
+      "password": "12"
     }
   ],
   "accounting": {

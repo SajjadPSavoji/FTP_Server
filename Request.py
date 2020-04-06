@@ -1,7 +1,8 @@
 import json
 class CRequest():
-    def __init__(self, str):
+    def __init__(self, str, sid=None):
         self.__dict__ = self.parse(str)
+        self.__dict__["sid"] = sid
 
     def parse(self, command):
         my_dict = {}
@@ -33,4 +34,7 @@ class SRequest():
 
     def __getitem__(self, key):
         return self.__dict__[key]
+
+    def __len__(self):
+        return len(self.__dict__)
 

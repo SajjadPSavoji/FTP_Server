@@ -1,3 +1,4 @@
+import os
 import socket 
 from _thread import *
 import threading
@@ -5,6 +6,7 @@ import json
 from Request import SRequest as Req
 from Response import SRecponse as Res
 from User import User
+from ATHRoutine import ATHRoutine as ATH
 
 class Server():
     def __init__(self, ip='', listen_port=1234, queue_size=10):
@@ -12,21 +14,40 @@ class Server():
         self.port_ = listen_port
         self.QSize_ = queue_size
 
+        self.init_dir(str(listen_port))
         self.config()
+
+    def init_dir(self, dirname):
+        parent_dir = os.getcwd()
+        new_path = os.path.join(parent_dir, dirname)
+        try:
+            os.mkdir(new_path)
+        except:
+            pass
+
+        self.dir = new_path
 
     def config(self):
         self.routines = {}
+        with open("config.json") as config:
+            data = json.load(config)
+
+            # ath unit
+            ath = ATH(data["users"])
+            self.routines["USER"] = ath
+            self.routines["PASS"] = ath
+            self.routines["QUIT"] = ath
+            
         # read json file and make appropriate routines
         return
         raise NotImplementedError()
 
     def portal(self, c, addr):
-        try:
-            self.client_hand_shake(c, addr)
-        except:
-            print("client offline")
-            return
-            raise NotImplementedError()
+        self.client_hand_shake(c, addr)
+        # try:
+        #     self.client_hand_shake(c, addr)
+        # except Exception as e:
+        #     print("client offline:", e)
     
     def run(self):
         lstn_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -87,7 +108,7 @@ class Server():
         print("data socket set up succesfully")
 
         # hal nadashtam ino doros konam badan doros mikonam
-        user = User(c_cmnd_sock, c_data_sock)
+        user = User(c_cmnd_sock, c_data_sock, self.dir)
         
         self.req_handler(user)
 
@@ -102,14 +123,14 @@ class Server():
                 self.ath_check(req)
                 res = self.routine_handler(req, user)
             except Res as r:
-                print("in except block")
                 res = r
             self.log(res, user)
             self.service(res, user)
+            if res == user.end_res: user.exit()
 
     def ath_check(self, req):
-        if "sid" in req:
-            self.routines["ath"].check(req)
+        if req["sid"] is not None:
+            self.routines["USER"].check(req)
 
         elif (req["routine"] == "USER") or (req["routine"] == "PASS"):
             pass
@@ -119,9 +140,9 @@ class Server():
 
     def routine_handler(self, req, user):
         if req["routine"] in self.routines:
-            return self.routines[[req["routine"]]].service(req, user)
+            return (self.routines[req["routine"]]).service(req, user)
         else:
-            return Res(502, "Command not implemented")
+            return Res(502, "Command not implemented", user.sid)
 
     def log(self, res, user):
         return

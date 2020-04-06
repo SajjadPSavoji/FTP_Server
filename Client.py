@@ -2,12 +2,17 @@ import socket
 import json
 from Request import CRequest as Req
 from Response import CRecponse as Res
+from Response import bcolors
+prompt_command = f"{bcolors.OKBLUE}[---]{bcolors.ENDC}: "
 
 class Client():
     def __init__(self, ip='127.0.0.1', server_listen_port=1234):
         self.ip_ = ip
         self.port_ = server_listen_port
+        self.sid = None
 
+    def update_sid(self, res):
+        self.sid = res["sid"]
 
     def run(self):
         client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -52,18 +57,19 @@ class Client():
     def command_handler(self):
         print("Ready for command:")
         while(True):
-            req = Req(input())
+            req = Req(input(prompt_command), self.sid)
             self.service(req)
             
 
     def service(self, req):
         self.s_cmnd_sock.send(req.__repr__())
-        msg = self.s_cmnd_sock.recv(1024).decode()
+        msg = self.s_cmnd_sock.recv(1024)
         res = Res(msg)
         # check stuff
         self.s_cmnd_sock.send("ACK".encode())
         self.s_cmnd_sock.recv(1024)
-        print(msg)
+        self.update_sid(res)
+        print(res)
 
         if "file" in res:
             self.rcv_file(res)
@@ -71,9 +77,4 @@ class Client():
 
     def rcv_file(self, res):
         raise NotImplementedError()
-
-    def exit(self):
-        self.c_data_sock.close()
-        self.c_cmnd_sock.close()
-        exit()
 
