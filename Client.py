@@ -1,6 +1,7 @@
 import socket
 import json
 from Request import CRequest as Req
+from Response import CRecponse as Res
 
 class Client():
     def __init__(self, ip='127.0.0.1', server_listen_port=1234):
@@ -52,9 +53,26 @@ class Client():
         print("Ready for command:")
         while(True):
             req = Req(input())
-            self.s_cmnd_sock.send(req.__repr__())
-            msg = self.s_cmnd_sock.recv(1024).decode()
-            # check stuff
-            self.s_cmnd_sock.send("ACK".encode())
-            print(msg)
+            self.service(req)
+            
+
+    def service(self, req):
+        self.s_cmnd_sock.send(req.__repr__())
+        msg = self.s_cmnd_sock.recv(1024).decode()
+        res = Res(msg)
+        # check stuff
+        self.s_cmnd_sock.send("ACK".encode())
+        print(msg)
+
+        if "file" in res:
+            self.rcv_file(res)
+
+
+    def rcv_file(self, res):
+        raise NotImplementedError()
+
+    def exit(self):
+        self.c_data_sock.close()
+        self.c_cmnd_sock.close()
+        exit()
 
