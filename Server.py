@@ -108,7 +108,7 @@ class Server():
         if req["routine"] in self.routines:
             return self.routines[[req["routine"]]].service(req)
         else:
-            raise Res(502, "Command not implemented")
+            return Res(502, "Command not implemented")
 
     def log(self, res):
         return
