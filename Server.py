@@ -29,6 +29,7 @@ class Server():
             pass
 
         self.dir = new_path
+        self.user_init_dir = "/"
 
     def config(self):
         self.routines = {}
@@ -122,7 +123,7 @@ class Server():
         print("data socket set up succesfully")
 
         # hal nadashtam ino doros konam badan doros mikonam
-        user = User(c_cmnd_sock, c_data_sock, self.dir)
+        user = User(c_cmnd_sock, c_data_sock, self.user_init_dir)
         
         self.req_handler(user)
 
