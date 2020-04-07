@@ -15,15 +15,16 @@ class Client():
         self.sid = res["sid"]
 
     def run(self):
-        client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_sock.connect((self.ip_, self.port_))
+        while True : 
+            client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client_sock.connect((self.ip_, self.port_))
 
-        msg = list(map(int, client_sock.recv(1024).decode().split()))
-        print("message from server recieved: ",msg)
-        client_sock.send("ACK".encode())
-        client_sock.close()
-        self.server_hand_shake(msg[0], msg[1])
-        self.command_handler()
+            msg = list(map(int, client_sock.recv(1024).decode().split()))
+            print("message from server recieved: ",msg)
+            client_sock.send("ACK".encode())
+            client_sock.close()
+            self.server_hand_shake(msg[0], msg[1])
+            self.command_handler()
             
     def server_hand_shake(self, cmnd_port, data_port):
         # make new sockets {cmnd_sock , data_sock}
@@ -58,21 +59,30 @@ class Client():
         print("Ready for command:")
         while(True):
             req = Req(input(prompt_command), self.sid)
-            self.service(req)
+            quit_check = self.service(req)
+            if quit_check == 1:
+                return 1
+
             
 
     def service(self, req):
         self.s_cmnd_sock.send(req.__repr__())
         msg = self.s_cmnd_sock.recv(1024)
+        msg_code = json.loads(msg.decode())['code']
         res = Res(msg)
         # check stuff
         self.s_cmnd_sock.send("ACK".encode())
         self.s_cmnd_sock.recv(1024)
+
         self.update_sid(res)
         print(res)
 
         if "file" in res:
             self.rcv_file(res)
+
+        if msg_code == 221: #or res.sid == None:
+            return 1
+        return 0
 
 
     def rcv_file(self, res):

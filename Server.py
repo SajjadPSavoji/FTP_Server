@@ -7,6 +7,9 @@ from Request import SRequest as Req
 from Response import SRecponse as Res
 from User import User
 from ATHRoutine import ATHRoutine as ATH
+from DIRRoutine import PWDRoutine as PWD
+from DIRRoutine import LISTRoutine as LST
+from HELPRoutine import HELPRoutine as HLP
 
 class Server():
     def __init__(self, ip='', listen_port=1234, queue_size=10):
@@ -37,6 +40,17 @@ class Server():
             self.routines["USER"] = ath
             self.routines["PASS"] = ath
             self.routines["QUIT"] = ath
+            
+            #Directory routines
+            pwd = PWD(data["users"])
+            self.routines["PWD"]  = pwd
+            
+            lst = LST(data["users"])
+            self.routines["LIST"] = lst
+
+            #HELP
+            hlp = HLP(data["users"])
+            self.routines["HELP"] = hlp
             
         # read json file and make appropriate routines
         return
@@ -115,6 +129,8 @@ class Server():
     def req_handler(self, user):
         while True:
             msg = user.cmnd_sock.recv(1024)
+            if msg.decode() == "":
+                continue
             req = Req(msg)
             print("command recieved: ", req.__repr__())
             #redirect to a function that handles requests :))
@@ -136,13 +152,13 @@ class Server():
             pass
 
         else:
-            raise Res(530, "Not loged in")
+            raise Res(530, None)
 
     def routine_handler(self, req, user):
         if req["routine"] in self.routines:
             return (self.routines[req["routine"]]).service(req, user)
         else:
-            return Res(502, "Command not implemented", user.sid)
+            return Res(502, None, user.sid)
 
     def log(self, res, user):
         return

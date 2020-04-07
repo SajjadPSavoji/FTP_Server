@@ -1,8 +1,47 @@
 import json
 
+class code_mapper():
+    mapping = { 331 : "User name okay, need password.",
+                230 : "User logged in, proceed.",
+                530 : "Not logged in.",
+                503 : "Bad sequence of commands.",
+                536 : "Pass needed.",
+                430 : "Invalid username or password",
+                257 : "created.", #
+                250 : "deleted.", #
+                226 : "File transfer done.",
+                250 : "Successful change.",
+                # 226 : "Successful Download.",
+                214 : "",
+                221 : "Successful Quit.",
+                332 : "Need account for login.",
+                501 : "Syntax error in parameters or arguments.",
+                500 : "Error.",
+                425 : "Can't open data connection.",
+                502 : "Command not implemented.", 
+                550 : "File unavailable.",
+                535 : "Session id invalid",
+                404 : ""}
+
+    def __init__(self, number, msg):
+        self.number = number
+        self.msg = msg
+    def code_map(self):
+        if self.msg == None:
+            if self.number in [250, 257]:
+                raise Exception("Not possible")
+            else:
+                return self.mapping[self.number]
+        else:
+            if self.number in [250, 257]:
+                return self.msg + self.mapping[self.number]
+            else:
+                return self.msg
+
+
 class SRecponse(Exception):
-    def __init__(self, number, msg="ok", sid=None):
-        self.__dict__ = {"code": number, "msg":msg, "sid":sid}
+    def __init__(self, number, msg=None, sid=None):
+        self.__dict__ = {"code": number, "msg": code_mapper(number, msg).code_map(), "sid": sid}
     
     def __repr__(self):
         return json.dumps(self.__dict__).encode()
