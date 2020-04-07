@@ -158,7 +158,7 @@ class Server():
         if req["routine"] in self.routines:
             return (self.routines[req["routine"]]).service(req, user)
         else:
-            return Res(502, None, user.sid)
+            return Res(502)
 
     def log(self, res, user):
         return
