@@ -3,6 +3,7 @@ import json
 from Request import CRequest as Req
 from Response import CRecponse as Res
 from Response import bcolors
+import os
 prompt_command = f"{bcolors.OKBLUE}[---]{bcolors.ENDC}: "
 
 class Client():
@@ -10,6 +11,15 @@ class Client():
         self.ip_ = ip
         self.port_ = server_listen_port
         self.sid = None
+
+    def init_dir(self, port):
+        parent_dir = os.getcwd()
+        new_path = os.path.join(parent_dir, str(port))
+        try:
+            os.mkdir(new_path)
+        except:
+            pass
+        os.chdir(new_path)
 
     def reset(self):
         self.sid = None
@@ -21,6 +31,7 @@ class Client():
     def run(self):
         while True : 
             client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.init_dir(client_sock.getsockname()[1])
             client_sock.connect((self.ip_, self.port_))
 
             msg = list(map(int, client_sock.recv(1024).decode().split()))
