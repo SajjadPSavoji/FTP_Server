@@ -42,14 +42,14 @@ class Server():
             self.routines["QUIT"] = ath
             
             #Directory routines
-            pwd = PWD(data["users"])
+            pwd = PWD()
             self.routines["PWD"]  = pwd
             
-            lst = LST(data["users"])
-            self.routines["LIST"] = lst
+            # lst = LST()
+            # self.routines["LIST"] = lst
 
             #HELP
-            hlp = HLP(data["users"])
+            hlp = HLP(self.routines)
             self.routines["HELP"] = hlp
             
         # read json file and make appropriate routines

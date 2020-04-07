@@ -5,9 +5,8 @@ import uuid
 import os
 
 class PWDRoutine(base):
-    def __init__(self, users):
-        self.__dict__ = self.gen_dict(users)
-        self.sids_ = []
+    def __init__(self):
+        super().__init__()
 
     @staticmethod
     def help_str():
@@ -16,20 +15,12 @@ class PWDRoutine(base):
     def service(self, req, user):
         if req["routine"] == "PWD":
             return self.pwd_service(req ,user)
-        elif req["routine"] == "LIST":
-            return self.list_service(req ,user)
         else:
             raise Exception("request not supported")
 
     def pwd_service(self, req, user):
         my_dir = user.dir_
         return Res(404, my_dir, user.sid)
-
-    def gen_dict(self, users):
-        new_dic = {}
-        for user in users:
-            new_dic[user["user"]] = user["password"]
-        return new_dic
 
 
 # NOT COMPLETE YET

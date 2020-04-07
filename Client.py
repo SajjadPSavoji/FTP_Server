@@ -11,8 +11,12 @@ class Client():
         self.port_ = server_listen_port
         self.sid = None
 
+    def reset(self):
+        self.sid = None
+
     def update_sid(self, res):
-        self.sid = res["sid"]
+        if res["sid"] is not None:
+            self.sid = res["sid"]
 
     def run(self):
         while True : 
@@ -25,6 +29,7 @@ class Client():
             client_sock.close()
             self.server_hand_shake(msg[0], msg[1])
             self.command_handler()
+            self.reset()
             
     def server_hand_shake(self, cmnd_port, data_port):
         # make new sockets {cmnd_sock , data_sock}
