@@ -84,7 +84,6 @@ class Client():
     def service(self, req):
         self.s_cmnd_sock.send(req.__repr__())
         msg = self.s_cmnd_sock.recv(1024)
-        msg_code = json.loads(msg.decode())['code']
         res = Res(msg)
         # check stuff
         self.s_cmnd_sock.send("ACK".encode())
@@ -94,13 +93,27 @@ class Client():
         print(res)
 
         if "file" in res:
-            self.rcv_file(res)
+            print("file in res")
+            self.rcv_file(req, res)
 
-        if msg_code == 221: #or res.sid == None:
+        if res["code"] == 221: #or res.sid == None:
             return 1
         return 0
 
+    def rcv_file(self, req, res):
+        msg = self.s_data_sock.recv(res["file"])#res{"file"} now contais size
+        file = Res(msg)
+        # check stuff
+        self.s_data_sock.send("ACK".encode())
+        self.s_data_sock.recv(1024)
+        self.file_service(req, file)
 
-    def rcv_file(self, res):
-        raise NotImplementedError()
+    def file_service(self, req , file):
+        if req["routine"]=="LIST":
+            self.list_handler(file)
+        else:
+            raise NotImplementedError()
+
+    def list_handler(self, file):
+        print(file["file"])
 

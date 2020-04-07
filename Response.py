@@ -1,10 +1,26 @@
 import json
 
 class SRecponse(Exception):
-    def __init__(self, number, msg=None, sid=None):
-        self.__dict__ = {"code": number, "msg": code_mapper(number, msg).code_map(), "sid": sid}
+    def __init__(self, number, msg=None, sid=None, file=None):
+        self.__dict__ = {"code": number, "msg" : code_mapper(number, msg).code_map(),
+                          "sid": sid   , "file": file}
+        if file is None:
+            self.__dict__.pop("file")
     
     def __repr__(self):
+        if "file" in self.__dict__:
+            temp = self.__dict__["file"]
+            self.__dict__["file"] = temp.size + 1024
+            ret = json.dumps(self.__dict__).encode()
+            self.__dict__["file"] = temp
+        else:
+            ret = json.dumps(self.__dict__).encode()
+        return ret
+    
+    def data(self):
+        if not "file" in self.__dict__:
+            return self.__repr__()
+        self.__dict__["file"] = repr(self.__dict__["file"])
         return json.dumps(self.__dict__).encode()
 
     def __contains__(self, key):

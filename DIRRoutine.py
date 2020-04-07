@@ -1,8 +1,11 @@
 from Routine  import Routine   as base
 from Response import SRecponse as Res
 from Request  import SRequest  as Req
+from File     import File
 import uuid
 import os
+from os import listdir
+from os.path import isfile, join
 
 class PWDRoutine(base):
     def __init__(self):
@@ -25,9 +28,9 @@ class PWDRoutine(base):
 
 # NOT COMPLETE YET
 class LISTRoutine(base):
-    def __init__(self, users):
-        self.__dict__ = self.gen_dict(users)
-        self.sids_ = []
+    def __init__(self, base_path):
+        super().__init__()
+        self.base = base_path
 
     @staticmethod
     def help_str():
@@ -40,17 +43,14 @@ class LISTRoutine(base):
             raise Exception("request not supported")
     
     def list_service(self, req, user):
-        print(user.dir_)
-        for root, dirs, files in os.walk(user.dir_):
-            print(root, dirs, files)
-            for filename in files:
-                print(filename)
-        return Res(226, None , user.sid)
-
-    def gen_dict(self, users):
-        new_dic = {}
-        for user in users:
-            new_dic[user["user"]] = user["password"]
-        return new_dic
+        mypath = os.path.join(self.base, user.dir)
+        # mypath = self.base
+        onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+        names = ""
+        for f in onlyfiles:
+            names += f
+            names += "\n"
+        # return Res(226)
+        return Res(226, file=File(str=names))
 
 

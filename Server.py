@@ -29,7 +29,6 @@ class Server():
             pass
 
         self.dir = new_path
-        self.user_init_dir = "/"
 
     def config(self):
         self.routines = {}
@@ -46,8 +45,8 @@ class Server():
             pwd = PWD()
             self.routines["PWD"]  = pwd
             
-            # lst = LST()
-            # self.routines["LIST"] = lst
+            lst = LST(self.dir)
+            self.routines["LIST"] = lst
 
             #HELP
             hlp = HLP(self.routines)
@@ -123,7 +122,7 @@ class Server():
         print("data socket set up succesfully")
 
         # hal nadashtam ino doros konam badan doros mikonam
-        user = User(c_cmnd_sock, c_data_sock, self.user_init_dir)
+        user = User(c_cmnd_sock, c_data_sock)
         
         self.req_handler(user)
 
@@ -149,11 +148,11 @@ class Server():
         if req["sid"] is not None:
             self.routines["USER"].check(req)
 
-        elif (req["routine"] == "USER") or (req["routine"] == "PASS"):
+        elif (req["routine"] == "USER") or (req["routine"] == "PASS") or (req["routine"] == "HELP"):
             pass
 
         else:
-            raise Res(530, None)
+            raise Res(530)
 
     def routine_handler(self, req, user):
         if req["routine"] in self.routines:
@@ -173,6 +172,7 @@ class Server():
         user.cmnd_sock.send("ACK".encode()) # send ACK
         # send file whenever necessarry
         if "file" in res:
+            print("-------- sending file ------------")
             self.send_file(res, user)
 
     
@@ -180,7 +180,11 @@ class Server():
         raise NotImplementedError()
 
     def send_file(self, res, user):
-        raise NotImplementedError()
+        user.data_sock.send(res.data()) # send file
+        msg = user.data_sock.recv(1024).decode()     # receive ACK
+        if not msg == "ACK":
+            self.exit()
+        user.data_sock.send("ACK".encode()) # send ACK
 
     
 

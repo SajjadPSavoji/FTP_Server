@@ -9,7 +9,7 @@ class User():
         self.cmnd_sock = c_cmnd_sock
         self.data_sock = c_data_sock
         # each thread needs emulated working directory
-        self.dir_ = dir
+        self.dir = dir
         self.end_res = Res(230, "Logged out")
 
     def set_username(self, username):

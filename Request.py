@@ -22,6 +22,16 @@ class CRequest():
     def __repr__(self):
         return json.dumps(self.__dict__).encode()
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def __len__(self):
+        return len(self.__dict__)
+
+
 class SRequest():
     def __init__(self, str):
         self.__dict__ = json.loads(str.decode())
