@@ -72,7 +72,7 @@ class MKDRoutine(base):
     def mkd_service(self, req, user):
         mypath = os.path.join(self.base, user.dir)
         if len(req["args"]) == 0:
-            raise Exception("bad arguments")
+            return Res(501)
         
         #check if address is local 
         if req["args"][0][0] == '/':
@@ -80,7 +80,6 @@ class MKDRoutine(base):
         else:
             dirpath = os.path.join(mypath, req["args"][0])
 
-        print("++", dirpath)
         if req["flags"] == ['-i']:
             # make file
             try:
@@ -120,7 +119,7 @@ class RMDRoutine(base):
     def rmd_service(self, req, user):
         mypath = os.path.join(self.base, user.dir)
         if len(req["args"]) == 0:
-            raise Exception("bad arguments")
+            return Res(501)
         
         #check if address is local 
         if req["args"][0][0] == '/':
@@ -128,7 +127,6 @@ class RMDRoutine(base):
         else:
             dirpath = os.path.join(mypath, req["args"][0])
         
-        print("++", dirpath)
         if req["flags"] == ['-f']:
             # rmv dir
             try:
@@ -172,16 +170,26 @@ class CWDRoutine(base):
         
         #check if address is local 
         if req["args"][0][0] == '/':
-            user.dir = os.path.join(".", req["args"][0][1:])
+            norm_path = os.path.join(".", req["args"][0][1:])
         else:
-            user.dir = os.path.join(user.dir, req["args"][0])
+            norm_path = os.path.join(user.dir, req["args"][0])
         
+        # Normalizes the path -> ../..
+        norm_path = os.path.normpath(norm_path)
+        user.dir = norm_path
+
         mypath = os.path.join(self.base, user.dir)
         # check if it is a valid dir
-        if os.path.exists(mypath):
-            pass
-        else:
+        if os.path.exists(mypath) == 0:
             user.dir = last_dir
-            raise Exception("Dir doesnt exist")
+            return Res(214, msg="Dir doesnt exist")
+        elif user.dir[:2] == "..":
+            user.dir = "."
+            mypath = os.path.join(self.base, user.dir)
+            return Res(214, msg="Not allowed")
+        elif os.path.isdir(mypath) == 0:
+            user.dir = last_dir
+            return Res(214, msg="is not a Dir")
+            
         print("This dir contains:",[f for f in listdir(mypath)])
         return Res(212, msg="Successful change.", sid=user.sid)
