@@ -148,3 +148,40 @@ class RMDRoutine(base):
         
         print("This dir contains:",[f for f in listdir(mypath)])
         return Res(250, dirpath, user.sid)
+
+class CWDRoutine(base):
+    def __init__(self, base_path):
+        super().__init__()
+        self.base = base_path
+
+    @staticmethod
+    def help_str():
+        return """CWD, It is used to change the working directory.\n\t"""
+
+    def service(self, req, user):
+        if req["routine"] == "CWD":
+            return self.cwd_service(req ,user)
+        else:
+            raise Exception("request not supported")
+    
+    def cwd_service(self, req, user):
+        last_dir = user.dir
+        if len(req["args"]) == 0:
+            user.dir = "."
+            return Res(212, msg="Successful change.", sid=user.sid)
+        
+        #check if address is local 
+        if req["args"][0][0] == '/':
+            user.dir = os.path.join(".", req["args"][0][1:])
+        else:
+            user.dir = os.path.join(user.dir, req["args"][0])
+        
+        mypath = os.path.join(self.base, user.dir)
+        # check if it is a valid dir
+        if os.path.exists(mypath):
+            pass
+        else:
+            user.dir = last_dir
+            raise Exception("Dir doesnt exist")
+        print("This dir contains:",[f for f in listdir(mypath)])
+        return Res(212, msg="Successful change.", sid=user.sid)

@@ -80,6 +80,7 @@ class code_mapper():
                 # 250 : "Successful change.",
                 # 226 : "Successful Download.",
                 214 : "",
+                212 : "Directory status",
                 221 : "Successful Quit.",
                 332 : "Need account for login.",
                 501 : "Syntax error in parameters or arguments.",

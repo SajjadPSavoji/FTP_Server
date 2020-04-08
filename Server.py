@@ -11,6 +11,7 @@ from DIRRoutine import PWDRoutine as PWD
 from DIRRoutine import LISTRoutine as LST
 from DIRRoutine import MKDRoutine as MKD
 from DIRRoutine import RMDRoutine as RMD
+from DIRRoutine import CWDRoutine as CWD
 from HELPRoutine import HELPRoutine as HLP
 
 class Server():
@@ -55,6 +56,9 @@ class Server():
 
             rmd = RMD(self.dir)
             self.routines["RMD"] = rmd
+
+            cwd = CWD(self.dir)
+            self.routines["CWD"] = cwd
 
             #HELP
             hlp = HLP(self.routines)
