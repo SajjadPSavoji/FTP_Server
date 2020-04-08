@@ -74,8 +74,8 @@ class code_mapper():
                 503 : "Bad sequence of commands.",
                 536 : "Pass needed.",
                 430 : "Invalid username or password",
-                257 : "created.", #
-                250 : "deleted.", #
+                257 : " created.", #
+                250 : " deleted.", #
                 226 : "File transfer done.",
                 # 250 : "Successful change.",
                 # 226 : "Successful Download.",

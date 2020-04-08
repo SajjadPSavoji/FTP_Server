@@ -9,6 +9,8 @@ from User import User
 from ATHRoutine import ATHRoutine as ATH
 from DIRRoutine import PWDRoutine as PWD
 from DIRRoutine import LISTRoutine as LST
+from DIRRoutine import MKDRoutine as MKD
+from DIRRoutine import RMDRoutine as RMD
 from HELPRoutine import HELPRoutine as HLP
 
 class Server():
@@ -47,6 +49,12 @@ class Server():
             
             lst = LST(self.dir)
             self.routines["LIST"] = lst
+
+            mkd = MKD(self.dir)
+            self.routines["MKD"] = mkd
+
+            rmd = RMD(self.dir)
+            self.routines["RMD"] = rmd
 
             #HELP
             hlp = HLP(self.routines)

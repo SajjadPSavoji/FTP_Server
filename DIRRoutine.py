@@ -22,7 +22,7 @@ class PWDRoutine(base):
             raise Exception("request not supported")
 
     def pwd_service(self, req, user):
-        my_dir = user.dir_
+        my_dir = user.dir
         return Res(404, my_dir, user.sid)
 
 
@@ -54,3 +54,97 @@ class LISTRoutine(base):
         return Res(226, file=File(str=names))
 
 
+class MKDRoutine(base):
+    def __init__(self, base_path):
+        super().__init__()
+        self.base = base_path
+
+    @staticmethod
+    def help_str():
+        return """MKD, It is used to create a file or directory.\n\t"""
+
+    def service(self, req, user):
+        if req["routine"] == "MKD":
+            return self.mkd_service(req ,user)
+        else:
+            raise Exception("request not supported")
+    
+    def mkd_service(self, req, user):
+        mypath = os.path.join(self.base, user.dir)
+        if len(req["args"]) == 0:
+            raise Exception("bad arguments")
+        
+        #check if address is local 
+        if req["args"][0][0] == '/':
+            dirpath = os.path.join(self.base, req["args"][0][1:])
+        else:
+            dirpath = os.path.join(mypath, req["args"][0])
+
+        print("++", dirpath)
+        if req["flags"] == ['-i']:
+            # make file
+            try:
+                os.mknod(dirpath)
+                print("File " , dirpath ,  " Created ") 
+            except FileExistsError:
+                print("File " , dirpath ,  " already exists")
+                return Res(500, msg="File already exists")
+        else:
+            #make dir
+            try:
+                os.mkdir(dirpath)
+                print("Directory " , dirpath ,  " Created ") 
+            except FileExistsError:
+                print("Directory " , dirpath ,  " already exists")
+                return Res(500, msg="Dir already exists")
+        
+        print("This dir contains:",[f for f in listdir(mypath)])
+        return Res(257, dirpath, user.sid)
+
+
+class RMDRoutine(base):
+    def __init__(self, base_path):
+        super().__init__()
+        self.base = base_path
+
+    @staticmethod
+    def help_str():
+        return """RMD, It is used to delete a file or directory.\n\t"""
+
+    def service(self, req, user):
+        if req["routine"] == "RMD":
+            return self.rmd_service(req ,user)
+        else:
+            raise Exception("request not supported")
+    
+    def rmd_service(self, req, user):
+        mypath = os.path.join(self.base, user.dir)
+        if len(req["args"]) == 0:
+            raise Exception("bad arguments")
+        
+        #check if address is local 
+        if req["args"][0][0] == '/':
+            dirpath = os.path.join(self.base, req["args"][0][1:])
+        else:
+            dirpath = os.path.join(mypath, req["args"][0])
+        
+        print("++", dirpath)
+        if req["flags"] == ['-f']:
+            # rmv dir
+            try:
+                os.rmdir(dirpath)
+                print("Dir " , dirpath ,  " Deleted ") 
+            except FileNotFoundError:
+                print("Dir " , dirpath ,  " Dir doesnt exist or is not empty")
+                return Res(500, msg="Dir doesnt exist or is not empty")
+        else:
+            #rmv file
+            try:
+                os.remove(dirpath)
+                print("Dir " , dirpath ,  " Deleted ") 
+            except FileExistsError:
+                print("Dir " , dirpath ,  " doesnt exist")
+                return Res(500, msg="File doesnt exist")
+        
+        print("This dir contains:",[f for f in listdir(mypath)])
+        return Res(250, dirpath, user.sid)
