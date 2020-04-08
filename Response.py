@@ -20,7 +20,7 @@ class SRecponse(Exception):
     def data(self):
         if not "file" in self.__dict__:
             return self.__repr__()
-        self.__dict__["file"] = repr(self.__dict__["file"])
+        self.__dict__["file"] = self.__dict__["file"].data()
         return json.dumps(self.__dict__).encode()
 
     def __contains__(self, key):

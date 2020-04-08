@@ -10,9 +10,9 @@ class ATHRoutine(base):
 
     @staticmethod
     def help_str():
-        return """ USER [name], Its argument is used to specify the user's string.It is used for user authentication.
-        PASS [pass], Its argument is used to check user's validity and authentication.
-        QUIT, It is used to log the user out.\n\t"""
+        return """USER [name], Its argument is used to specify the user's string.
+PASS [pass], Its argument is used to check user's validity and authentication.
+QUIT, It is used to log the user out.\n"""
 
     def service(self, req, user):
         if req["routine"] == "USER":

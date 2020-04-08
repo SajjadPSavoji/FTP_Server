@@ -13,7 +13,7 @@ class PWDRoutine(base):
 
     @staticmethod
     def help_str():
-        return """PWD, It is used to check the current working directory.\n\t"""
+        return """PWD, It is used to check the current working directory.\n"""
 
     def service(self, req, user):
         if req["routine"] == "PWD":
@@ -23,7 +23,7 @@ class PWDRoutine(base):
 
     def pwd_service(self, req, user):
         my_dir = user.dir
-        return Res(404, my_dir, user.sid)
+        return Res(257, my_dir)
 
 
 # NOT COMPLETE YET
@@ -34,7 +34,7 @@ class LISTRoutine(base):
 
     @staticmethod
     def help_str():
-        return """LIST, It is used to find out the files in current directory.\n\t"""
+        return """LIST, It is used to find out the files in current directory.\n"""
 
     def service(self, req, user):
         if req["routine"] == "LIST":
@@ -45,9 +45,10 @@ class LISTRoutine(base):
     def list_service(self, req, user):
         mypath = os.path.join(self.base, user.dir)
         # mypath = self.base
-        onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+        file_and_dirs = listdir(mypath)
+        onlyfiles = [f for f in file_and_dirs if isfile(join(mypath, f))]
         names = ""
-        for f in onlyfiles:
+        for f in file_and_dirs:
             names += f
             names += "\n"
         # return Res(226)
@@ -61,7 +62,7 @@ class MKDRoutine(base):
 
     @staticmethod
     def help_str():
-        return """MKD, It is used to create a file or directory.\n\t"""
+        return """MKD, It is used to create a file or directory.\n"""
 
     def service(self, req, user):
         if req["routine"] == "MKD":
@@ -108,7 +109,7 @@ class RMDRoutine(base):
 
     @staticmethod
     def help_str():
-        return """RMD, It is used to delete a file or directory.\n\t"""
+        return """RMD, It is used to delete a file or directory.\n"""
 
     def service(self, req, user):
         if req["routine"] == "RMD":
@@ -154,7 +155,7 @@ class CWDRoutine(base):
 
     @staticmethod
     def help_str():
-        return """CWD, It is used to change the working directory.\n\t"""
+        return """CWD, It is used to change the working directory.\n"""
 
     def service(self, req, user):
         if req["routine"] == "CWD":
@@ -186,7 +187,7 @@ class CWDRoutine(base):
         elif user.dir[:2] == "..":
             user.dir = "."
             mypath = os.path.join(self.base, user.dir)
-            return Res(214, msg="Not allowed")
+            return Res(214)
         elif os.path.isdir(mypath) == 0:
             user.dir = last_dir
             return Res(214, msg="is not a Dir")

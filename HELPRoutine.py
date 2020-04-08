@@ -7,7 +7,7 @@ import uuid
 class HELPRoutine(base):
     def __init__(self, routines):
         super().__init__()
-        self.routines = routines
+        self.routines = set(routines.values())
 
     def service(self, req, user):
         if req["routine"] == "HELP":
@@ -16,14 +16,11 @@ class HELPRoutine(base):
             raise Exception("request not supported")
 
     def help_service(self, req):
-        help_msg = ""
+        help_msg = "\n"
         for routine in self.routines:
-            help_msg += self.routines[routine].help_str()
+            help_msg += routine.help_str()
         return Res(214, help_msg)
 
     @staticmethod
     def help_str():
-        return """
-        HELP <no arg> shows all the available commands
-
-        """
+        return """HELP <no arg> shows all the available command\n"""

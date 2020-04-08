@@ -1,18 +1,19 @@
+from ATHRoutine  import ATHRoutine  as ATH
+from DIRRoutine  import PWDRoutine  as PWD
+from DIRRoutine  import LISTRoutine as LST
+from DIRRoutine  import MKDRoutine  as MKD
+from DIRRoutine  import RMDRoutine  as RMD
+from DIRRoutine  import CWDRoutine  as CWD
+from HELPRoutine import HELPRoutine as HLP
+from DLRoutine   import DLRoutine   as DL
+from Request     import SRequest    as Req
+from Response    import SRecponse   as Res
+from User import User
+from _thread import *
 import os
 import socket 
-from _thread import *
 import threading
 import json
-from Request import SRequest as Req
-from Response import SRecponse as Res
-from User import User
-from ATHRoutine import ATHRoutine as ATH
-from DIRRoutine import PWDRoutine as PWD
-from DIRRoutine import LISTRoutine as LST
-from DIRRoutine import MKDRoutine as MKD
-from DIRRoutine import RMDRoutine as RMD
-from DIRRoutine import CWDRoutine as CWD
-from HELPRoutine import HELPRoutine as HLP
 
 class Server():
     def __init__(self, ip='', listen_port=1234, queue_size=10):
@@ -59,6 +60,9 @@ class Server():
 
             cwd = CWD(self.dir)
             self.routines["CWD"] = cwd
+
+            dl = DL(self.dir)
+            self.routines["DL"] = dl
 
             #HELP
             hlp = HLP(self.routines)

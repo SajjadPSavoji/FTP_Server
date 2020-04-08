@@ -3,6 +3,7 @@ import json
 from Request import CRequest as Req
 from Response import CRecponse as Res
 from Response import bcolors
+from File import File
 import os
 prompt_command = f"{bcolors.OKBLUE}[---]{bcolors.ENDC}: "
 
@@ -111,9 +112,22 @@ class Client():
     def file_service(self, req , file):
         if req["routine"]=="LIST":
             self.list_handler(file)
+        elif req["routine"]=="DL":
+            self.dl_handler(file)
         else:
             raise NotImplementedError()
 
     def list_handler(self, file):
-        print(file["file"])
+        f = File()
+        f.load(file)
+        print(f)
+    
+    def dl_handler(self, file):
+        f = File()
+        f.load(file)
+        print(f)
+        f.save()
+        
+
+    
 
