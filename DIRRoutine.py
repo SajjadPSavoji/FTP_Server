@@ -2,6 +2,7 @@ from Routine  import Routine   as base
 from Response import SRecponse as Res
 from Request  import SRequest  as Req
 from File     import File
+from Path     import Path
 import uuid
 import os
 from os import listdir
@@ -23,7 +24,7 @@ class PWDRoutine(base):
 
     def pwd_service(self, req, user):
         my_dir = user.dir
-        return Res(257, my_dir)
+        return Res(214, my_dir)
 
 
 # NOT COMPLETE YET
@@ -75,11 +76,12 @@ class MKDRoutine(base):
         if len(req["args"]) == 0:
             return Res(501)
         
-        #check if address is local 
-        if req["args"][0][0] == '/':
-            dirpath = os.path.join(self.base, req["args"][0][1:])
-        else:
-            dirpath = os.path.join(mypath, req["args"][0])
+        # #check if address is local 
+        # if req["args"][0][0] == '/':
+        #     dirpath = os.path.join(self.base, req["args"][0][1:])
+        # else:
+        #     dirpath = os.path.join(mypath, req["args"][0])
+        dirpath = Path().join(self.base, req["args"][0], user.dir)
 
         if req["flags"] == ['-i']:
             # make file
@@ -122,25 +124,40 @@ class RMDRoutine(base):
         if len(req["args"]) == 0:
             return Res(501)
         
-        #check if address is local 
-        if req["args"][0][0] == '/':
-            dirpath = os.path.join(self.base, req["args"][0][1:])
-        else:
-            dirpath = os.path.join(mypath, req["args"][0])
+        # #check if address is local 
+        # if req["args"][0][0] == '/':
+        #     dirpath = os.path.join(self.base, req["args"][0][1:])
+        # else:
+        #     dirpath = os.path.join(mypath, req["args"][0])
+        dirpath = Path().join(self.base, req["args"][0], user.dir)
         
         if req["flags"] == ['-f']:
             # rmv dir
             try:
-                os.rmdir(dirpath)
-                print("Dir " , dirpath ,  " Deleted ") 
+                if os.path.isdir(dirpath):
+                    if not os.listdir(dirpath):
+                        os.rmdir(dirpath)
+                        print("Dir " , dirpath ,  " Deleted ")
+                    else:
+                        print(dirpath ,  " is not a empty")
+                        return Res(500, msg="is not a empty")    
+                else:
+                    print(dirpath ,  " is not a directory")
+                    return Res(500, msg="is not a directory")
+
             except FileNotFoundError:
                 print("Dir " , dirpath ,  " Dir doesnt exist or is not empty")
                 return Res(500, msg="Dir doesnt exist or is not empty")
         else:
             #rmv file
             try:
-                os.remove(dirpath)
-                print("Dir " , dirpath ,  " Deleted ") 
+                if os.path.isfile(dirpath):
+                    os.remove(dirpath)
+                    print("Dir " , dirpath ,  " Deleted ")
+                else:
+                    print(dirpath ,  " is not a file")
+                    return Res(500, msg="is not a file")
+
             except FileExistsError:
                 print("Dir " , dirpath ,  " doesnt exist")
                 return Res(500, msg="File doesnt exist")
@@ -169,14 +186,15 @@ class CWDRoutine(base):
             user.dir = "."
             return Res(212, msg="Successful change.", sid=user.sid)
         
-        #check if address is local 
-        if req["args"][0][0] == '/':
-            norm_path = os.path.join(".", req["args"][0][1:])
-        else:
-            norm_path = os.path.join(user.dir, req["args"][0])
-        
-        # Normalizes the path -> ../..
-        norm_path = os.path.normpath(norm_path)
+        # #check if address is local 
+        # if req["args"][0][0] == '/':
+        #     norm_path = os.path.join(".", req["args"][0][1:])
+        # else:
+        #     norm_path = os.path.join(user.dir, req["args"][0])
+        # # Normalizes the path -> ../..
+        # norm_path = os.path.normpath(norm_path)
+        dirpath = Path().join(self.base, req["args"][0], user.dir) #final destination
+        norm_path = Path().join_user_dir(req["args"][0], user.dir)
         user.dir = norm_path
 
         mypath = os.path.join(self.base, user.dir)
@@ -184,10 +202,10 @@ class CWDRoutine(base):
         if os.path.exists(mypath) == 0:
             user.dir = last_dir
             return Res(214, msg="Dir doesnt exist")
-        elif user.dir[:2] == "..":
-            user.dir = "."
-            mypath = os.path.join(self.base, user.dir)
-            return Res(214)
+        # elif user.dir[:2] == "..":
+        #     user.dir = "."
+        #     mypath = os.path.join(self.base, user.dir)
+        #     return Res(214)
         elif os.path.isdir(mypath) == 0:
             user.dir = last_dir
             return Res(214, msg="is not a Dir")
