@@ -38,7 +38,7 @@ class Server():
         self.routines = {}
         with open("config.json") as config:
             data = json.load(config)
-
+            # print(data)
             # ath unit
             ath = ATH(data["users"])
             self.routines["USER"] = ath
