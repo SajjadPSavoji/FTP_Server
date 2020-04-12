@@ -8,7 +8,8 @@ from HELPRoutine import HELPRoutine as HLP
 from DLRoutine   import DLRoutine   as DL
 from Request     import SRequest    as Req
 from Response    import SRecponse   as Res
-from User import User
+from User        import User
+from Log         import Log
 from _thread import *
 import os
 import socket 
@@ -67,6 +68,9 @@ class Server():
             #HELP
             hlp = HLP(self.routines)
             self.routines["HELP"] = hlp
+
+            #log
+            self.log = Log(data["logging"])
             
         # read json file and make appropriate routines
         return
@@ -148,6 +152,7 @@ class Server():
             if msg.decode() == "":
                 continue
             req = Req(msg)
+            self.log(user, req)
             print("command recieved: ", req.__repr__())
             #redirect to a function that handles requests :))
             res = None
@@ -156,7 +161,7 @@ class Server():
                 res = self.routine_handler(req, user)
             except Res as r:
                 res = r
-            self.log(res, user)
+            self.log(user, res)
             self.service(res, user)
             if res == user.end_res: user.exit()
 
@@ -175,10 +180,6 @@ class Server():
             return (self.routines[req["routine"]]).service(req, user)
         else:
             return Res(502)
-
-    def log(self, res, user):
-        return
-        raise NotImplementedError()
 
     def service(self, res, user):
         user.cmnd_sock.send(res.__repr__()) # send response

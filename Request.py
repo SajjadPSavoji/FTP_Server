@@ -22,6 +22,9 @@ class CRequest():
     def __repr__(self):
         return json.dumps(self.__dict__).encode()
 
+    def __str__(self):
+        return json.dumps(self.__dict__)
+
     def __contains__(self, item):
         return item in self.__dict__
 
@@ -38,6 +41,9 @@ class SRequest():
 
     def __repr__(self):
         return json.dumps(self.__dict__).encode()
+
+    def __str__(self):
+        return json.dumps(self.__dict__)
 
     def __contains__(self, item):
         return item in self.__dict__

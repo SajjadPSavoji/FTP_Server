@@ -16,6 +16,16 @@ class SRecponse(Exception):
         else:
             ret = json.dumps(self.__dict__).encode()
         return ret
+
+    def __str__(self):
+        if "file" in self.__dict__:
+            temp = self.__dict__["file"]
+            self.__dict__["file"] = self.__dict__["file"].path
+            ret = json.dumps(self.__dict__)
+            self.__dict__["file"] = temp
+        else:
+            ret = json.dumps(self.__dict__)
+        return ret
     
     def data(self):
         if not "file" in self.__dict__:

@@ -8,9 +8,14 @@ class User():
 
         self.cmnd_sock = c_cmnd_sock
         self.data_sock = c_data_sock
+        self.ip = c_cmnd_sock.getsockname()[0]
+        self.port = c_cmnd_sock.getsockname()[1]
         # each thread needs emulated working directory
         self.dir = dir
         self.end_res = Res(230, "Logged out")
+
+    def __str__(self):
+        return f"user:{self.username}, ip:{self.ip}, port:{self.port}"
 
     def set_username(self, username):
         self.username= username

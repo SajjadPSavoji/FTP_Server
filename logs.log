@@ -1,0 +1,20 @@
+[2020-04-13 02:08:13.786820]-user:None, ip:127.0.0.1, port:49075
+{"routine": "sajjad", "flags": [], "args": [], "sid": null}
+[2020-04-13 02:08:13.787712]-user:None, ip:127.0.0.1, port:49075
+{"code": 530, "msg": "Not logged in.", "sid": null}
+[2020-04-13 02:08:38.981173]-user:None, ip:127.0.0.1, port:49075
+{"routine": "USER", "flags": [], "args": ["sajjad"], "sid": null}
+[2020-04-13 02:08:38.981913]-user:sajjad, ip:127.0.0.1, port:49075
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-13 02:08:41.523708]-user:sajjad, ip:127.0.0.1, port:49075
+{"routine": "PASS", "flags": [], "args": ["1"], "sid": null}
+[2020-04-13 02:08:41.524961]-user:sajjad, ip:127.0.0.1, port:49075
+{"code": 230, "msg": "User logged in, proceed.", "sid": "fa435cba-7d05-11ea-84a9-24fd52ccd16f"}
+[2020-04-13 02:08:45.720651]-user:sajjad, ip:127.0.0.1, port:49075
+{"routine": "LIST", "flags": [], "args": [], "sid": "fa435cba-7d05-11ea-84a9-24fd52ccd16f"}
+[2020-04-13 02:08:45.721628]-user:sajjad, ip:127.0.0.1, port:49075
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": null}
+[2020-04-13 02:09:06.600010]-user:sajjad, ip:127.0.0.1, port:49075
+{"routine": "DL", "flags": [], "args": ["sina.txt"], "sid": "fa435cba-7d05-11ea-84a9-24fd52ccd16f"}
+[2020-04-13 02:09:06.601297]-user:sajjad, ip:127.0.0.1, port:49075
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": "/home/savoji/Desktop/term8/CN/CAs/CA1/ftpserver/1234/sina.txt"}
