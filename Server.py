@@ -62,7 +62,7 @@ class Server():
             cwd = CWD(self.dir)
             self.routines["CWD"] = cwd
 
-            dl = DL(self.dir)
+            dl = DL(self.dir,"config.json")
             self.routines["DL"] = dl
 
             #HELP

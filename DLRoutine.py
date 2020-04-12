@@ -1,14 +1,16 @@
-from Routine  import Routine   as base
-from Response import SRecponse as Res
-from Request  import SRequest  as Req
-from Path     import Path
-from File     import File
+from Routine    import Routine   as base
+from Response   import SRecponse as Res
+from Request    import SRequest  as Req
+from Path       import Path
+from File       import File
+from Accounting import Accounting
 import os
 
 class DLRoutine(base):
-    def __init__(self, base_dir):
+    def __init__(self, base_dir, config_path):
         super().__init__()
         self.base = base_dir
+        self.accounting = Accounting(config_path)
 
     @staticmethod
     def help_str():
@@ -31,14 +33,13 @@ class DLRoutine(base):
         raise NotImplementedError()
         # for athorization checks
     
-    def check_accounting(self):
-        return
-        raise NotImplementedError()
-        # for accounting part
+    def check_accounting(self, user, file):
+        self.accounting(user, file)
 
     def dl_service(self, req, user):
         path = self.get_file_path(req, user)
         file = File(path)
+        self.check_accounting(user, file)
         return Res(226, file=file)
         
 
