@@ -100,7 +100,7 @@ class MKDRoutine(base):
                 print("Directory " , dirpath ,  " already exists")
                 return Res(500, msg="Dir already exists")
         
-        print("This dir contains:",[f for f in listdir(mypath)])
+        # print("This dir contains:",[f for f in listdir(mypath)])
         return Res(257, dirpath, user.sid)
 
 
@@ -162,7 +162,7 @@ class RMDRoutine(base):
                 print("Dir " , dirpath ,  " doesnt exist")
                 return Res(500, msg="File doesnt exist")
         
-        print("This dir contains:",[f for f in listdir(mypath)])
+        # print("This dir contains:",[f for f in listdir(mypath)])
         return Res(250, dirpath, user.sid)
 
 class CWDRoutine(base):
@@ -210,5 +210,5 @@ class CWDRoutine(base):
             user.dir = last_dir
             return Res(214, msg="is not a Dir")
             
-        print("This dir contains:",[f for f in listdir(mypath)])
+        # print("This dir contains:",[f for f in listdir(mypath)])
         return Res(212, msg="Successful change.", sid=user.sid)

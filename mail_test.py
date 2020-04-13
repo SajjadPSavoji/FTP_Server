@@ -4,6 +4,8 @@ mail_port = 25
 ending = "\r\n"
 
 def send_mail(email_from, email_to, AUTH_USER, AUTH_PASS, message):
+    email_from = "<"+email_from+">"
+    email_to = "<"+email_to+">"
     mail_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     mail_socket.connect(("mail.ut.ac.ir", mail_port))
     print("connecting to mail.ut.ac.ir")
@@ -18,13 +20,13 @@ def send_mail(email_from, email_to, AUTH_USER, AUTH_PASS, message):
         raise Exception("server not responding")
 
     mail_socket.send(("MAIL FROM: " + email_from + ending).encode())
-    print("MAIL FROM: <sinasharifi@ut.ac.ir>")
+    # print("MAIL FROM: <sinasharifi@ut.ac.ir>")
     msg = mail_socket.recv(1024).decode()
     if msg[0:3] != '250':
         raise Exception("User not found")
 
     mail_socket.send(("AUTH LOGIN" + ending).encode())
-    print("Authentication:")
+    # print("Authentication:")
     mail_socket.recv(1024).decode()
 
     mail_socket.send((AUTH_USER + ending).encode())
@@ -57,5 +59,5 @@ def send_mail(email_from, email_to, AUTH_USER, AUTH_PASS, message):
     print(mail_socket.recv(1024).decode())
     return 0
 
-send_mail("<sinasharifi@ut.ac.ir>", "<salimnia.ah@ut.ac.ir>", 
-            "c2luYXNoYXJpZmkK", "UzFuYTk4MDY=", "YOU ARE OUT OF CREDIT")
+# send_mail("sinasharifi@ut.ac.ir", "salimnia.ah@ut.ac.ir", 
+#             "c2luYXNoYXJpZmkK", "UzFuYTk4MDY=", "YOU ARE OUT OF CREDIT")
