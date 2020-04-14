@@ -12,12 +12,12 @@
         }
     ],
     "accounting": {
-        "enable": false,
+        "enable": true,
         "threshold": 100,
         "users": [
             {
                 "user": "sajjad",
-                "size": 1200,
+                "size": 1,
                 "email": "sinasharifi@ut.ac.ir",
                 "alert": true
             },
@@ -36,11 +36,13 @@
     "authorization": {
         "enable": true,
         "admins": [
-            "farzad"
+            "farzad",
+            "sajjad"
         ],
         "files": [
             "./config.json",
-            "./example.png"
+            "./example.png",
+            "./sina.txt"
         ]
     }
 }

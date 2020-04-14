@@ -1,7 +1,7 @@
 from Response import SRecponse as Res
 import os
 class Path():
-    def join(self, base, relative, user_dir):
+    def join(self, base, relative, user_dir = ""):
         dst = None
         if   self.is_local(relative):   dst= os.path.join(base, user_dir, relative)
         elif self.is_abs(relative)  :   dst= os.path.join(base, relative[1:])
