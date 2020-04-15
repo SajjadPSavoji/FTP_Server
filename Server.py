@@ -10,11 +10,15 @@ from Request     import SRequest    as Req
 from Response    import SRecponse   as Res
 from User        import User
 from Log         import Log
+from Response    import bcolors
 from _thread import *
 import os
 import socket 
 import threading
 import json
+
+prompt_init = f"{bcolors.OKBLUE}>>>>>{bcolors.ENDC}: "
+
 
 class Server():
     def __init__(self, queue_size=10):
@@ -28,9 +32,7 @@ class Server():
     def init_socks(self):
         self.lstn_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.lstn_sock.bind((self.ip_, self.port_))
-        self.data_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.data_sock.bind((self.ip_, self.dport_))
-        print("socket binded to %s" %(self.port_))
+        print(prompt_init, "Socket init, sucessfull.")
 
     def init_addr(self):
         self.ip_ = ''
@@ -49,6 +51,7 @@ class Server():
             pass
 
         self.dir = new_path
+        print(prompt_init, "Directory init, sucessfull.")
 
     def config(self):
         self.routines = {}
@@ -86,53 +89,35 @@ class Server():
 
             #log
             self.log = Log(data["logging"])
+
+        print(prompt_init, "Server Configuration, done.")
             
 
     def portal(self, c, addr):
-        self.client_hand_shake(c, addr)
-        # try:
-        #     self.client_hand_shake(c, addr)
-        # except Exception as e:
-        #     print("client offline:", e)
+        # self.client_hand_shake(c, addr)
+        try:
+            self.client_hand_shake(c, addr)
+        except Exception as e:
+            print(prompt_init, "client disconnected!", e)
     
     def run(self):
         self.lstn_sock.listen(self.QSize_)
-        print("socket is listening")
+        print(prompt_init, "Server is ready to service.")
 
         while True:
             client, addr = self.lstn_sock.accept()
-            print('Got connection from', addr)
+            print(prompt_init, 'Got connection from', addr)
             start_new_thread(self.portal, (client,addr,))
             
     def client_hand_shake(self, c, addr):
-        # make new sockets { data_sock}
-        s_data_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s_data_sock.bind((self.ip_, 0))
-
-        # listen on data_port
-        s_data_sock.listen(1)
-        # send port numbers to client
-        msg = str(s_data_sock.getsockname()[1])
-        c.send(msg.encode())
-        # recieve ACK
+        c_data_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        c_data_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        c_data_sock.bind((self.ip_, self.dport_))
         msg = c.recv(1024).decode()
-        print("ACK recieved")
-        if not msg == "ACK":
-            c.close()
-            raise Exception("connection lost")
-       
-        # accept client data port {c_data_port}
-        c_data_sock, addr = s_data_sock.accept() 
-        # send ACK
-        c_data_sock.send("ACK".encode())
-        # recieve ACK
-        msg = c_data_sock.recv(1024).decode()
-        if not msg == "ACK":
-            raise Exception("connectin lost")
-        print("data socket set up succesfully")
+        c_data_port = int(msg)
+        c_data_sock.connect((self.ip_, c_data_port))
 
         user = User(c, c_data_sock)
-        
         self.req_handler(user)
 
     def req_handler(self, user):
@@ -142,7 +127,6 @@ class Server():
                 continue
             req = Req(msg)
             self.log(user, req)
-            print("command recieved: ", req.__repr__())
             res = None
             try:
                 self.ath_check(req)
@@ -177,7 +161,6 @@ class Server():
         user.cmnd_sock.send("ACK".encode()) # send ACK
         # send file whenever necessarry
         if "file" in res:
-            print("-------- sending file ------------")
             self.send_file(res, user)
 
     

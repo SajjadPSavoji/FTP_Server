@@ -780,3 +780,99 @@
 {"routine": "LIST", "flags": [], "args": [], "sid": "840d8686-7f50-11ea-8c4c-24fd52ccd16f"}
 [2020-04-16 00:07:19.548535]-user:sajjad, ip:127.0.0.1, port:8000
 {"code": 226, "msg": "File transfer done.", "sid": null, "file": null}
+[2020-04-16 00:54:37.103941]-user:None, ip:127.0.0.1, port:8000
+{"routine": "USER", "flags": [], "args": ["sajjad"], "sid": null}
+[2020-04-16 00:54:37.104957]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-16 00:54:54.765683]-user:None, ip:127.0.0.1, port:8000
+{"routine": "USER", "flags": [], "args": ["sajjad"], "sid": null}
+[2020-04-16 00:54:54.766278]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-16 00:54:58.977977]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "PASS", "flags": [], "args": ["1"], "sid": null}
+[2020-04-16 00:54:58.978933]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 230, "msg": "User logged in, proceed.", "sid": "2d75a2d4-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:55:09.644640]-user:None, ip:127.0.0.1, port:8000
+{"routine": "USER", "flags": [], "args": ["sina"], "sid": null}
+[2020-04-16 00:55:09.645051]-user:sina, ip:127.0.0.1, port:8000
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-16 00:55:11.650001]-user:sina, ip:127.0.0.1, port:8000
+{"routine": "PASS", "flags": [], "args": ["12"], "sid": null}
+[2020-04-16 00:55:11.650706]-user:sina, ip:127.0.0.1, port:8000
+{"code": 230, "msg": "User logged in, proceed.", "sid": "35033444-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:57:51.412236]-user:None, ip:127.0.0.1, port:8000
+{"routine": "USER", "flags": [], "args": ["sajjad"], "sid": null}
+[2020-04-16 00:57:51.413278]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-16 00:57:53.656901]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "PASS", "flags": [], "args": ["1"], "sid": null}
+[2020-04-16 00:57:53.658391]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 230, "msg": "User logged in, proceed.", "sid": "959399e8-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:57:55.932694]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "LIST", "flags": [], "args": [], "sid": "959399e8-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:57:55.933663]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": null}
+[2020-04-16 00:58:02.312236]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "DL", "flags": [], "args": ["test.txt"], "sid": "959399e8-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:58:02.313677]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": "/home/savoji/Desktop/term8/CN/CAs/CA1/ftpserver/8000/test.txt"}
+[2020-04-16 00:58:18.569649]-user:None, ip:127.0.0.1, port:8000
+{"routine": "USER", "flags": [], "args": ["sina"], "sid": null}
+[2020-04-16 00:58:18.570394]-user:sina, ip:127.0.0.1, port:8000
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-16 00:58:21.026538]-user:sina, ip:127.0.0.1, port:8000
+{"routine": "PASS", "flags": [], "args": ["12"], "sid": null}
+[2020-04-16 00:58:21.027368]-user:sina, ip:127.0.0.1, port:8000
+{"code": 230, "msg": "User logged in, proceed.", "sid": "a5e3c7d2-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:58:24.119994]-user:sina, ip:127.0.0.1, port:8000
+{"routine": "LIST", "flags": [], "args": [], "sid": "a5e3c7d2-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:58:24.121126]-user:sina, ip:127.0.0.1, port:8000
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": null}
+[2020-04-16 00:58:28.056591]-user:sina, ip:127.0.0.1, port:8000
+{"routine": "DL", "flags": [], "args": ["test.txt"], "sid": "a5e3c7d2-7f57-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 00:58:28.058528]-user:sina, ip:127.0.0.1, port:8000
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": "/home/savoji/Desktop/term8/CN/CAs/CA1/ftpserver/8000/test.txt"}
+[2020-04-16 01:08:57.859780]-user:None, ip:127.0.0.1, port:8000
+{"routine": "USER", "flags": [], "args": ["sajjad"], "sid": null}
+[2020-04-16 01:08:57.860627]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-16 01:09:03.174212]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "PASS", "flags": [], "args": ["1"], "sid": null}
+[2020-04-16 01:09:03.175032]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 230, "msg": "User logged in, proceed.", "sid": "24a3bcfc-7f59-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 01:10:08.202475]-user:None, ip:127.0.0.1, port:8000
+{"routine": "\u001b[A", "flags": [], "args": [], "sid": null}
+[2020-04-16 01:10:08.203080]-user:None, ip:127.0.0.1, port:8000
+{"code": 530, "msg": "Not logged in.", "sid": null}
+[2020-04-16 01:11:07.882409]-user:None, ip:127.0.0.1, port:8000
+{"routine": "\u001b[A", "flags": [], "args": [], "sid": null}
+[2020-04-16 01:11:07.886261]-user:None, ip:127.0.0.1, port:8000
+{"code": 530, "msg": "Not logged in.", "sid": null}
+[2020-04-16 01:14:33.752466]-user:None, ip:127.0.0.1, port:8000
+{"routine": "USER", "flags": [], "args": ["sajjad"], "sid": null}
+[2020-04-16 01:14:33.752849]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 331, "msg": "User name okay, need password.", "sid": null}
+[2020-04-16 01:14:38.271260]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "PASS", "flags": [], "args": ["1"], "sid": null}
+[2020-04-16 01:14:38.272028]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 230, "msg": "User logged in, proceed.", "sid": "ec5f7d80-7f59-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 01:14:43.231728]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "DL", "flags": [], "args": ["sina.txt"], "sid": "ec5f7d80-7f59-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 01:14:43.232306]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 500, "msg": "invalid file name", "sid": null}
+[2020-04-16 01:14:50.374786]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "LIST", "flags": [], "args": [], "sid": "ec5f7d80-7f59-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 01:14:50.375308]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": null}
+[2020-04-16 01:14:55.751319]-user:sajjad, ip:127.0.0.1, port:8000
+{"routine": "DL", "flags": [], "args": ["test.txt"], "sid": "ec5f7d80-7f59-11ea-8c4c-24fd52ccd16f"}
+[2020-04-16 01:14:55.753010]-user:sajjad, ip:127.0.0.1, port:8000
+{"code": 226, "msg": "File transfer done.", "sid": null, "file": "/home/savoji/Desktop/term8/CN/CAs/CA1/ftpserver/8000/test.txt"}
+[2020-04-16 01:16:11.949637]-user:None, ip:127.0.0.1, port:8000
+{"routine": "\u001b[A", "flags": [], "args": [], "sid": null}
+[2020-04-16 01:16:11.954202]-user:None, ip:127.0.0.1, port:8000
+{"code": 530, "msg": "Not logged in.", "sid": null}
+[2020-04-16 01:16:13.221143]-user:None, ip:127.0.0.1, port:8000
+{"routine": "\u001b[A", "flags": [], "args": [], "sid": null}
+[2020-04-16 01:16:13.222230]-user:None, ip:127.0.0.1, port:8000
+{"code": 530, "msg": "Not logged in.", "sid": null}
