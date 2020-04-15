@@ -1,4 +1,3 @@
-from mail_test import send_mail
 import socket
 
 mail_port = 25

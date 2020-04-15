@@ -115,3 +115,4 @@ class code_mapper():
                 return self.msg + self.mapping[self.number]
             else:
                 return self.msg
+
