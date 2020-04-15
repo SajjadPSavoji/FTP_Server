@@ -17,13 +17,13 @@
         "users": [
             {
                 "user": "sajjad",
-                "size": 1,
+                "size": 15,
                 "email": "sinasharifi@ut.ac.ir",
                 "alert": true
             },
             {
                 "user": "sina",
-                "size": 150000000,
+                "size": 101,
                 "email": "sinasharifi@ut.ac.ir",
                 "alert": false
             }
