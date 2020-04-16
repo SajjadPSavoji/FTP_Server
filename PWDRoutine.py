@@ -9,8 +9,9 @@ from os import listdir
 from os.path import isfile, join
 
 class PWDRoutine(base):
-    def __init__(self):
+    def __init__(self, base_path):
         super().__init__()
+        self.base = base_path
 
     @staticmethod
     def help_str():
@@ -23,5 +24,9 @@ class PWDRoutine(base):
             raise Exception("request not supported")
 
     def pwd_service(self, req, user):
+        mypath = os.path.join(self.base, user.dir)
+        if os.path.exists(mypath) == 0:
+            user.dir = '.'
+        
         my_dir = user.dir
         return Res(214, my_dir)

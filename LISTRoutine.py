@@ -25,6 +25,11 @@ class LISTRoutine(base):
     
     def list_service(self, req, user):
         mypath = os.path.join(self.base, user.dir)
+
+        if os.path.exists(mypath) == 0:
+            user.dir = '.'
+            return Res(214, msg="Dir doesnt exist")
+
         # mypath = self.base
         file_and_dirs = listdir(mypath)
         onlyfiles = [f for f in file_and_dirs if isfile(join(mypath, f))]

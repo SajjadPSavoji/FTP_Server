@@ -65,7 +65,7 @@ class Server():
             self.routines["QUIT"] = ath
             
             #Directory routines
-            pwd = PWD()
+            pwd = PWD(self.dir)
             self.routines["PWD"]  = pwd
             
             lst = LST(self.dir)
